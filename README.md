@@ -158,6 +158,10 @@ Tools explored:
 
 ---
 
+## 🐍 Contribution snake
+
+![snake gif](https://github.com/DragonKael/DragonKael/blob/output/github-contribution-grid-snake.svg)
+
 ## 📫 Contact & portfolio
 
 * LinkedIn: `TU_LINKEDIN`
