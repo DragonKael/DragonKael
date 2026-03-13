@@ -158,13 +158,13 @@ Tools explored:
 
 ---
 
+## 📫 Contact & portfolio
+
+* LinkedIn: `www.linkedin.com/in/luismarinsalaschallco`
+* Email: `021100828g@uandina.edu.pe`
+* Portfolio / CV: `---`
+---
+
 ## 🐍 Contribution snake
 
 ![snake gif](https://github.com/DragonKael/DragonKael/blob/output/github-contribution-grid-snake.svg)
-
-## 📫 Contact & portfolio
-
-* LinkedIn: `TU_LINKEDIN`
-* Email: `TU_EMAIL`
-* Portfolio / CV: `TU_PORTFOLIO`
----
