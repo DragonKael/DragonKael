@@ -1,27 +1,62 @@
-name: generate snake
+# ══════════════════════════════════════════════
+#  DragonKael/DragonKael — Snake Workflow
+#  Genera la animación de contribuciones cada 12h
+#  y la sube al branch "output"
+# ══════════════════════════════════════════════
+
+name: Generate Snake Animation
+
+# PERMISO CRÍTICO — sin esto el push al branch "output" falla con error 403
+permissions:
+  contents: write
 
 on:
   schedule:
+    # Cada 12 horas (a las 0:00 y 12:00 UTC)
     - cron: "0 */12 * * *"
+
+  # Permite disparar manualmente desde la pestaña Actions
   workflow_dispatch:
+
+  # También se regenera en cada push a main (útil al principio)
+  push:
+    branches:
+      - main
 
 jobs:
   generate:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
-      - uses: Platane/snk/svg-only@v3
+      # 1. Checkout del repo
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Generar la animación SVG (versión rápida, sin GIF)
+      #    Genera dos variantes: clara y oscura
+      - name: Generate snake SVG
+        uses: Platane/snk/svg-only@v3
         with:
-          github_user_name: DragonKael
+          github_user_name: ${{ github.repository_owner }}
           outputs: |
             dist/github-contribution-grid-snake.svg
+            dist/github-contribution-grid-snake-dark.svg?palette=github-dark
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Commit and push
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git init
-          git checkout -b output
-          git add dist/*.svg
-          git commit -m "chore: update contribution snake"
-          git push --force https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} output
+      # 3. Verificar qué se generó (útil para debug)
+      - name: Show generated files
+        run: ls -la dist/
+
+      # 4. Subir los SVGs al branch "output"
+      #    El SVG queda disponible en:
+      #    https://raw.githubusercontent.com/DragonKael/DragonKael/output/github-contribution-grid-snake.svg
+      - name: Push to output branch
+        uses: crazy-max/ghaction-github-pages@v3.1.0
+        with:
+          target_branch: output
+          build_dir: dist
+          commit_message: "chore: update snake animation [skip ci]"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
